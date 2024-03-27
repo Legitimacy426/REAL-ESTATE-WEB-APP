@@ -10,36 +10,63 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/com
 import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
-import { ArrowLeftIcon } from "@radix-ui/react-icons"
+import { ArrowLeftIcon, ArrowRightIcon, DotsHorizontalIcon, HamburgerMenuIcon } from "@radix-ui/react-icons"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { serverTimestamp } from "firebase/firestore"
+import { deleteField, serverTimestamp } from "firebase/firestore"
 import { useState } from "react"
+import { PopoverTrigger, PopoverContent, Popover } from "@/components/ui/popover"
+import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
+
+
+
+
 import { add } from "@/libs/functions/add"
 
 
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage"
 import { app, db } from "@/libs/firebaseConfig"
+import useFetch from "@/libs/hooks/useFetch"
+import useFetchByID from "@/libs/hooks/useFetchByID"
+import { updateItem } from "@/libs/functions/update"
+import TimeAgo from "@/libs/functions/TimeAgo"
+import TimeAgof from "@/libs/functions/TimeAgo"
+import { deleteItem } from "@/libs/functions/delete"
+import Navbar from "../admin/Navbar"
 const storage = getStorage(app)
 
 
 
 export default function AdminHouses() {
 
+// data ===================
+const { cards, isErrorC, isPendingC } = useFetch("houses")  
+const [selectedId, setSelectedID] = useState('');
+// const { card, isErrorC1, isPendingC1 } = useFetchByID(selectedId)
+
+console.log(cards)
+
+
+
     // states=================
+
+    
+  
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState('');
     const [location, setLocation] = useState('');
     const [images, setImages] = useState([]);
     const [size, setSize] = useState('');
     const [files, setFiles] = useState([]);
+    const [status, setStatus] = useState('available');
 const [progress, setProgress] = useState({});
 const [error, setError] = useState(null);
 const [success, setSuccess] = useState(null);
+const [disabled, setDisabled] = useState(false);
 
 
 // functions
@@ -47,178 +74,171 @@ const handleChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
   };
-
+// add house ========================
     const handleSubmit = (e)=>{
 
         e.preventDefault()
-          //   upload photos================
+ setDisabled(true)
+if(name == "" || files.length == 0 || description == "" || price == "" || location == ""  ){
+  alert("All fields are required ")
+  setDisabled(false)
+  return
+}
+        
+          //upload photos================
 const tag = "houses"
+
     files.forEach((file) => {
-        const storageRef = ref(storage, `${tag}/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-  
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progressValue = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setProgress((prevProgress) => ({
-              ...prevProgress,
-              [file.name]: progressValue,
-            }));
-          },
-          (error) => {
-            setError(error.message);
-          },
-          () => {
-          
-             getDownloadURL(ref(storage, `${tag}/${file.name}`))
-              .then((url) => {
-                // successs================
-              images.push(url)
-                console.log('File available at: ', url);
-              });
-          }
-        );
-      });
+      const storageRef = ref(storage, `${tag}/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-        const doc = {
-           name,
-           label: name,
-           category:tag,
-           size,
-           location,
-           price,
-           createdAt:serverTimestamp(),
-           updatedAt : serverTimestamp(),
-           images,
-           thumnail : images[0]
-           }
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progressValue = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress((prevProgress) => ({
+            ...prevProgress,
+            [file.name]: progressValue,
+          }));
+        },
+        (error) => {
+          setError(error.message);
+          setDisabled(false)
+        },
+        () => {
+        
+           getDownloadURL(ref(storage, `${tag}/${file.name}`))
+            .then((url) => {
+              // successs================
+           images.push(url)
+              
+        
+        console.log('File available at: ', url);
+         
+    if(images.length === files.length){
+      setDisabled(true)
+       const doc = {
+      description,
+       name,
+       label: name,
+       category:tag,
+       size,
+       location,
+       price,
+       createdAt:serverTimestamp(),
+       updatedAt : serverTimestamp(),
+       images,
+       thumbnail : images[0],
+       status:"available"
+       }
 
-    add("properties",doc).then(()=>{
-  alert(`${name} added successifully`)
-    }).catch((e)=>{
-        alert(e.message)
-    })
+     add("properties",doc)
+ console.log(images.length)
+ setSuccess("House added succesifully ")
+ setDisabled(false)
+    }
+   
+
+            });
+        }
+      );
+    });
+
+      
 
     } 
 
 
-   
+// add photos
 
+const handleUpdate = (e)=>{
+
+  e.preventDefault()
+
+
+  
+    //upload photos================
+const tag = "houses"
+
+files.forEach((file) => {
+const storageRef = ref(storage, `${tag}/${file.name}`);
+const uploadTask = uploadBytesResumable(storageRef, file);
+
+uploadTask.on(
+  'state_changed',
+  (snapshot) => {
+    const progressValue = Math.round(
+      (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    );
+    setProgress((prevProgress) => ({
+      ...prevProgress,
+      [file.name]: progressValue,
+    }));
+  },
+  (error) => {
+    setError(error.message);
+  },
+  () => {
+  
+     getDownloadURL(ref(storage, `${tag}/${file.name}`))
+      .then((url) => {
+        // successs================
+     images.push(url)
+        
+  
+  console.log('File available at: ', url);
+   
+if(images.length === files.length){
+  setDisabled(true)
+ const doc = {
+  description,
+ name,
+ label: name,
+ category:tag,
+ size,
+ location,
+ price,
+ updatedAt : serverTimestamp(),
+ images,
+ thumbnail : images[0],
+ status:"available"
+ }
+
+updateItem(selectedId,doc)
+setSuccess("Updated successifully")
+setDisabled(false)
+}
+
+
+      });
+  }
+);
+});
+
+
+
+} 
+
+// delete ================================================================
+
+const handleDelete = (id,name) => {
+ const yes = confirm(`Do you really want to delete ${name}`)
+ if(yes){
+     deleteItem(id)
+ }
+
+ 
+}
 
   return (
-    <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link className="flex items-center gap-2 font-semibold" href="#">
-              <Package2Icon className="h-6 w-6" />
-              <span className="">Acme Inc</span>
-            </Link>
-            <Button className="ml-auto h-8 w-8" size="icon" variant="outline">
-              <BellIcon className="h-4 w-4" />
-              <span className="sr-only">Toggle notifications</span>
-            </Button>
-          </div>
-          <div className="flex-1 overflow-auto py-2">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <Link
-                className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
-                href="#"
-              >
-                <HomeIcon className="h-4 w-4" />
-                Home
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="#"
-              >
-                <PackageIcon className="h-4 w-4" />
-                Properties
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="#"
-              >
-                <UsersIcon className="h-4 w-4" />
-                Agents
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="#"
-              >
-                <SettingsIcon className="h-4 w-4" />
-                Settings
-              </Link>
-            
-            </nav>
-          </div>
-          <div className="mt-auto p-4">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle>Upgrade to Pro</CardTitle>
-                <CardDescription>Unlock all features and get unlimited access to our support team</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full" size="sm">
-                  Upgrade
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
+    <div className="grid min-h-screen ">
+    {/* header=== */}
+          
+   
       <div className="flex flex-col">
-        <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
-          <Link className="lg:hidden" href="#">
-            <Package2Icon className="h-6 w-6" />
-            <span className="sr-only">Home</span>
-          </Link>
-          <div className="w-full flex-1">
-            <form>
-              <div className="relative">
-                <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <Input
-                  className="w-full bg-white shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3 dark:bg-gray-950"
-                  placeholder="Search properties..."
-                  type="search"
-                />
-              </div>
-            </form>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
-                size="icon"
-                variant="ghost"
-              >
-                <img
-                  alt="Avatar"
-                  className="rounded-full"
-                  height="32"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "32/32",
-                    objectFit: "cover",
-                  }}
-                  width="32"
-                />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </header>
+       <Navbar />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center gap-4">
             <Button size="icon" variant="outline">
@@ -226,14 +246,97 @@ const tag = "houses"
               <span className="sr-only">Back</span>
             </Button>
             <h1 className="font-semibold text-lg md:text-xl">Houses</h1>
-            <Button className="ml-auto" size="" onClick={()=>document.getElementById('my_modal_3').showModal()}>
+            <Button className="ml-auto" size="" onClick={()=>{
+              
+              document.getElementById('my_modal_3').showModal()
+            
+              setName("")
+          setStatus("")
+          setSelectedID("")
+          setDescription("")
+          setPrice("")
+          setLocation("")
+          setSize("")
+            }
+            
+            
+            
+            } 
+              
+              
+              >
               New House
             </Button>
           </div>
           <Card>
             <CardContent className="p-0">
-              <div className="overflow-auto">
+              <div className="">
              {/* table here -================================================= */}
+             <Table className="w-full">
+      <TableHeader className="hidden sm:table-header-group">
+        <TableRow>
+          <TableHead className="w-[120px]"></TableHead>
+          <TableHead></TableHead>
+          <TableHead></TableHead>
+          <TableHead></TableHead>
+         
+          <TableHead className="w-[120px]"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+   {cards.map(card =>(
+       <TableRow className="divide-y" key={card.id}>
+       <TableCell>
+         <img
+           alt="House image"
+           className="aspect-video rounded-md overflow-hidden object-cover  "
+           height="80"
+           src={card.thumbnail}
+           width="120"
+         />
+       </TableCell>
+       <TableCell>
+         <div className="font-semibold">{card.label}</div>
+         <div className="text-sm text-gray-500 dark:text-gray-400">{card.location}</div>
+       </TableCell>
+       <TableCell className="font-semibold">{card.price}</TableCell>
+       <TableCell>{card.status}</TableCell>
+       <TableCell>just now</TableCell>
+       <TableCell className="flex gap-2">
+         <Popover>
+           <PopoverTrigger asChild>
+             <Button className="h-8 w-8" size="icon" variant="outline">
+               <DotsHorizontalIcon className="h-4 w-4" />
+             </Button>
+           </PopoverTrigger>
+           <PopoverContent align="end" className="w-36">
+        <div className="cursor-pointer" onClick={()=>
+        {
+          document.getElementById('modal_update').showModal()
+        
+          setName(card.name)
+          setStatus(card.status)
+          setSelectedID(card.id)
+          setDescription(card.description)
+          setPrice(card.price)
+          setLocation(card.location)
+          setSize(card.size)
+        }
+        
+        }>Update</div>
+      
+        <div className="cursor-pointer" onClick={()=>{handleDelete(card.id,card.name)}}>Delete</div>
+   
+           
+           </PopoverContent>
+         </Popover>
+       </TableCell>
+     </TableRow>
+   ))}
+        
+       
+      </TableBody>
+    </Table>
               </div>
             </CardContent>
           </Card>
@@ -241,7 +344,7 @@ const tag = "houses"
       </div>
 
       {/* modals -==================================== */}
-
+{/* add house ================= */}
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box rounded-none">
     <form method="dialog">
@@ -277,14 +380,78 @@ const tag = "houses"
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="bedrooms">Bedrooms</Label>
-          <Input value={""}  id="bedrooms" placeholder="Enter the number of bedrooms" />
+          <Label htmlFor="price">Status</Label>
+          <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bathrooms">Bathrooms</Label>
-          <Input  value={""} id="bathrooms" placeholder="Enter the number of bathrooms" />
+          <Label htmlFor="location">Size</Label>
+          <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
         </div>
       </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="photos">Photos</Label>
+        <Input id="photos" multiple type="file"  onChange={handleChange}/>
+        {Object.keys(progress).map((fileName) => (
+        <span key={fileName}>
+          <small>{fileName}: {progress[fileName]}%</small>
+        </span>
+      ))}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {success && <div style={{ color: 'green' }}>{success}</div>}
+        <p className="text-xs text-gray-500 dark:text-gray-400">You can select multiple images at once.</p>
+      </div>
+      <Button type="submit" onClick={(e)=>{handleSubmit(e)}} disabled={disabled}>Submit</Button>
+    </form>
+    </div>
+  </div>
+</dialog>
+
+{/* modal    update===================================================================== */}
+<dialog id="modal_update" className="modal">
+  <div className="modal-box rounded-none">
+    <form method="dialog">
+      {/* if there is a button in form, it will close the modal */}
+      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <div className="w-full max-w-2xl space-y-4">
+    <form action="">
+
+    <div className="space-y-2">
+        <h1 className="text-3xl font-bold">Update {name} </h1>
+        <p className="text-gray-500 dark:text-gray-400">
+          Fill out the form below and click submit to update {name} .
+        </p>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="title">Name/Title</Label>
+        <Input  value={name} id="title" placeholder="Enter the title/name"  required  onChange={(e)=>{setName(e.target.value)}} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">Description</Label>
+        <Textarea  value={description} className="min-h-[150px]" id="description" placeholder="Enter the description" required   onChange={(e)=>{setDescription(e.target.value)}} />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="price">Price</Label>
+          <Input  value={price}  id="price" placeholder="Enter the price"   onChange={(e)=>{setPrice(e.target.value)}}/>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="location">Location</Label>
+          <Input  value={location}  id="location" placeholder="Enter the location"   onChange={(e)=>{setLocation(e.target.value)}}/>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="price">Status</Label>
+          <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="location">Size</Label>
+          <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
+        </div>
+      </div>
+      
       <div className="space-y-2">
         <Label htmlFor="photos">Photos</Label>
         <Input id="photos" multiple type="file"  onChange={handleChange}/>
@@ -297,7 +464,7 @@ const tag = "houses"
       {success && <div style={{ color: 'green' }}>{success}</div>}
         <p className="text-xs text-gray-500 dark:text-gray-400">You can select multiple images at once.</p>
       </div>
-      <Button type="submit" onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
+      <Button type="submit" onClick={(e)=>{handleUpdate(e)}}>Submit</Button>
     </form>
     </div>
   </div>
