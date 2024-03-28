@@ -5,11 +5,11 @@
  */
 import Link from "next/link"
 
-export default function Component() {
+export default function Hero() {
   return (
-    <section key="1" className="w-full">
+    <section key="1" className="w-full h-100vh">
 
-      <div className="relative w-full">
+      <div className="relative w-full h-">
         
         <img alt="Hero" className="aspect-video object-center " height="400" src="/images/bghouse.jpg" width="" />
         <div className="absolute inset-0 flex items-center justify-center w-auto bg-black/40">

@@ -46,22 +46,7 @@ const Tables = ({tag}) => {
        <TableCell className="font-semibold">{card.price}</TableCell>
        <TableCell>{card.status}</TableCell>
        <TableCell>just now</TableCell>
-       <TableCell className="flex gap-2">
-         <Popover>
-           <PopoverTrigger asChild>
-             <Button className="h-8 w-8" size="icon" variant="outline">
-               <DotsHorizontalIcon className="h-4 w-4" />
-             </Button>
-           </PopoverTrigger>
-           <PopoverContent align="end" className="w-36">
-        
       
-        <div className="cursor-pointer" onClick={()=>{handleDelete(card.id,card.name)}}>View</div>
-   
-           
-           </PopoverContent>
-         </Popover>
-       </TableCell>
      </TableRow>
    ))}
         
