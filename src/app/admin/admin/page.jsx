@@ -1,15 +1,14 @@
 
 "use client"
+import Home from '@/comps/admin/Home'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const Page = () => {
-const router = useRouter()
 
-    router.push("./")
   return (
    <>
-   <p>Loading .....</p>
+<Home />
    </>
   )
 }
