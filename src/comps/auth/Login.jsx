@@ -34,7 +34,7 @@ setError("")
       const user = userCredential.user;
     //  console.log(user.uid)
      localStorage.setItem("userId", user.uid);
-   if(email == "morani@gmail.com"){
+   if(email == "marani@gmail.com"){
 
  const role = 'admin'
  localStorage.setItem("role", role);
@@ -61,7 +61,9 @@ setError("")
             <div className="inline-block p-4 bg-white bg-opacity-75">
               <FlagIcon className="h-12 w-12 text-blue-500" />
             </div>
-            <h1 className="mt-4 text-4xl font-bold text-white">Morani Global Properties</h1>
+            <h1 className="mt-4 text-4xl font-bold text-white">  <span>Marani</span>
+               <span  className="text-red-500" >Global</span>
+               <span>Properties</span></h1>
           </div>
         </div>
       </div>

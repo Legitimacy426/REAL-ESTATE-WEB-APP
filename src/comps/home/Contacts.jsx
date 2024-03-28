@@ -5,7 +5,21 @@
  */
 export default function Contacts() {
     return (
+      <section className="w-full py-12 lg:py-24">
+      <div className="container px-4 md:px-6">
+      <div className="flex flex-col items-center justify-center space-y-4 text-center">
+      <div className="space-y-2">
+        <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
+         Talk to us
+        </div>
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Reach out now.</h2>
+        <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-450">
+        Get in touch with us today to explore your options and discuss how we can assist you further.
+        </p>
+      </div>
+    </div>
       <section className="w-full py-12 md:py-24">
+        
         <div className="container grid gap-12 px-4 md:px-6">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold">Our Contacts</h2>
@@ -24,14 +38,14 @@ export default function Contacts() {
               <div className="flex items-center space-x-4">
                 <MapPinIcon className="w-6 h-6 flex-shrink-0" />
                 <div className="space-y-1.5">
-                  <p className="font-medium">1234 Sunshine Rd</p>
-                  <p>San Francisco, CA 94110</p>
+                  <p className="font-medium">Biashara  Rd</p>
+                  <p>Nairobi Kenya,View park Towers</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <PhoneIcon className="w-6 h-6 flex-shrink-0" />
                 <a className="underline underline-offset-2" href="#">
-                  123-456-7890
+                +254746121317
                 </a>
               </div>
               <div className="flex items-center space-x-4">
@@ -46,7 +60,7 @@ export default function Contacts() {
                 alt="Contact"
                 className="rounded-lg object-cover"
                 height="300"
-                src="images/house1.jpg"
+                src="images/contact.png"
                 style={{
                   aspectRatio: "400/300",
                   objectFit: "cover",
@@ -57,6 +71,9 @@ export default function Contacts() {
           </div>
         </div>
       </section>
+      </div>
+      </section>
+      
     )
   }
   

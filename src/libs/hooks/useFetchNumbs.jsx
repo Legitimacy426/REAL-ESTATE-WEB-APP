@@ -22,7 +22,7 @@ const [cardslength, setCardlength] = useState([]);
 const [cards, setCards] = useState([]);
 const [isErrorC, setError] = useState(null);
 const [isPendingC, setPendingC] = useState(true);
-const [lastdate, setLastDate] = useState(true);
+const [lastdate, setLastDate] = useState('');
 
 
     useEffect(() => {
@@ -43,20 +43,24 @@ const [lastdate, setLastDate] = useState(true);
         setCards(Cards)
         setCardlength(Cards.length);
         setPendingC(false);
-  const d = Cards[0].createdAt
-  setLastDate(d)
+  const d = Cards[0].updatedAt
+  const ts = (d.seconds+d.nanos*10**-9)*1000
+  day = new Date(ts)
+
+  setLastDate(day) 
+ 
       })
       .catch((e) => {
         console.log(e.message);
         setError(e.message);
       });
-  }, [tag]);
+  }, []);
   return (
   
 
     <>
          <div className="text-2xl font-bold">  <span>{cardslength } </span></div>
-        <p className="text-xs text-gray-500 dark:text-gray-400"> Last added <TimeAgo date={new Date()} />
+        <p className="text-xs text-gray-500 dark:text-gray-400"> Last added <TimeAgo date={lastdate} />
         </p>
          {isPendingC && (<span className="loading loading-spinner loading-xs"></span>)}
     </>

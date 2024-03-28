@@ -12,10 +12,10 @@ const Home = () => {
     <>
     <Nav />
     <Hero />
-    <Houses />
-    <Lands />
-    <Services />
-    <Contacts />
+    <Houses  id="houses"/>
+    <Lands id="lands"/>
+    <Services id="services"/>
+    <Contacts id="contacts"/>
     <Footer />
     </>
   )

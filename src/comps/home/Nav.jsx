@@ -12,11 +12,11 @@ export default function Nav() {
       <nav className=" md:flex md:gap-4 md:items-center md:flex-1 lg:gap-6">
         <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
           <MountainIcon className="h-6 w-6" />
-          <span className="sr-only">Morani</span>
+          <span className="sr-only">Marani</span>
         </Link>
       </nav>
       <div className="flex-1" />
-      <Button size="sm">Sign in</Button>
+     <Link href={'/auth'}><Button size="sm" >Sign in</Button></Link>
     </header>
   )
 }

@@ -4,8 +4,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Real estates",
-  description: "Find Homes and land at affordable prices",
+  title: "Marani Global Properties",
+  description: "Marani Global Properties",
 };
 
 export default function RootLayout({ children }) {
