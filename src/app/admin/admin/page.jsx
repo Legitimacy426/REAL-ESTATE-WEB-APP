@@ -14,4 +14,4 @@ const router = useRouter()
   )
 }
 
-export default page
+export default Page
