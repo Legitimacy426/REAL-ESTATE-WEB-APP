@@ -15,8 +15,9 @@ const Navbar = () => {
         </div>
         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100  w-52 rounded-xsm border">
          <li><Link href={'./'}  >Home</Link></li>
-         <li><Link href={'./houses'}  >Houses</Link></li>
-         <li><Link href={'./lands'}  >lands</Link></li>
+         <li><Link href={'./admin'}  >Dashboard</Link></li>
+         <li><Link href={'/admin/houses'}  >Houses</Link></li>
+         <li><Link href={'/admin/lands'}  >lands</Link></li>
         </ul>
       </div>
     </div>

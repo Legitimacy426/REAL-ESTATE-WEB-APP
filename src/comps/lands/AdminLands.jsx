@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { deleteField, serverTimestamp } from "firebase/firestore"
 import { useState } from "react"
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/ui/popover"
-
+import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
 
 
 
@@ -36,16 +36,18 @@ import TimeAgo from "@/libs/functions/TimeAgo"
 import TimeAgof from "@/libs/functions/TimeAgo"
 import { deleteItem } from "@/libs/functions/delete"
 import Navbar from "../admin/Navbar"
-import Errors from "../Errors"
 import { useRouter } from "next/navigation"
+import Errors from "../Errors"
+
 const storage = getStorage(app)
 
 
 
-export default function AdminHouses() {
-const router = useRouter()
+export default function AdminLands() {
+
 // data ===================
-const { cards, isErrorC, isPendingC } = useFetch("houses")  
+const router = useRouter()
+const { cards, isErrorC, isPendingC } = useFetch("lands")  
 const [selectedId, setSelectedID] = useState('');
 // const { card, isErrorC1, isPendingC1 } = useFetchByID(selectedId)
 
@@ -88,7 +90,7 @@ if(name == "" || files.length == 0 || description == "" || price == "" || locati
 }
         
           //upload photos================
-const tag = "houses"
+const tag = "lands"
 
     files.forEach((file) => {
       const storageRef = ref(storage, `${tag}/${file.name}`);
@@ -138,7 +140,7 @@ const tag = "houses"
 
      add("properties",doc)
  console.log(images.length)
- setSuccess("House added succesifully ")
+ setSuccess("land added succesifully ")
  setDisabled(false)
     }
    
@@ -162,7 +164,7 @@ const handleUpdate = (e)=>{
 
   
     //upload photos================
-const tag = "houses"
+const tag = "lands"
 
 files.forEach((file) => {
 const storageRef = ref(storage, `${tag}/${file.name}`);
@@ -244,10 +246,10 @@ const handleDelete = (id,name) => {
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center gap-4">
             <Button size="icon" variant="outline">
-            <ArrowLeftIcon className="h-4 w-4"  onClick={router.back}/>
+              <ArrowLeftIcon className="h-4 w-4"  onClick={router.back}/>
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="font-semibold text-lg md:text-xl">Houses</h1>
+            <h1 className="font-semibold text-lg md:text-xl">Lands</h1>
             <Button className="ml-auto" size="" onClick={()=>{
               
               document.getElementById('my_modal_3').showModal()
@@ -267,10 +269,10 @@ const handleDelete = (id,name) => {
               
               
               >
-              New House
+              New Land
             </Button>
           </div>
-       
+         
               <div className="">
              {/* table here -================================================= */}
              <Table className="w-full">
@@ -289,7 +291,7 @@ const handleDelete = (id,name) => {
        <TableRow className="divide-y" key={card.id}>
        <TableCell className="hidden md:block">
          <img
-           alt="House image"
+           alt="Land image"
            className="aspect-video rounded-md overflow-hidden object-cover  "
            height="80"
            src={card.thumbnail}
@@ -337,16 +339,15 @@ const handleDelete = (id,name) => {
         
        
       </TableBody>
-    </Table> 
-     <Errors data={cards} loading={isPendingC} error={isErrorC} />
-
+    </Table>
+    <Errors data={cards} loading={isPendingC} error={isErrorC} />
               </div>
-          
+         
         </main>
       </div>
 
       {/* modals -==================================== */}
-{/* add house ================= */}
+{/* add land ================= */}
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box rounded-none">
     <form method="dialog">
@@ -357,9 +358,9 @@ const handleDelete = (id,name) => {
     <form action="">
 
     <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Add a new house</h1>
+        <h1 className="text-3xl font-bold">Add a new Land</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Fill out the form below and click submit to add the house to the website.
+          Fill out the form below and click submit to add the land to the website.
         </p>
       </div>
       <div className="space-y-2">
@@ -386,8 +387,8 @@ const handleDelete = (id,name) => {
           <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Size</Label>
-          <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
+          <Label htmlFor="location">Size/Area</Label>
+          <Input  value={size}  id="size" placeholder="Area in Acres"   onChange={(e)=>{setSize(e.target.value)}}/>
         </div>
       </div>
       
@@ -449,8 +450,8 @@ const handleDelete = (id,name) => {
           <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Size</Label>
-          <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
+          <Label htmlFor="location">Size/Area</Label>
+          <Input  value={size}  id="size" placeholder=""   onChange={(e)=>{setSize(e.target.value)}}/>
         </div>
       </div>
       
