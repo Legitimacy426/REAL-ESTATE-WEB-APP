@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 
 export default function Nav() {
   return (
-    <header className="flex items-center h-16 w-full px-4 md:px-6">
+    <>
+    <header className="flex items-center h-16 w-full px-4 md:px-6 fixed z-10 bg-white   ">
       <nav className=" md:flex md:gap-4 md:items-center md:flex-1 lg:gap-6">
         <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
           <MountainIcon className="h-6 w-6" />
@@ -18,6 +19,8 @@ export default function Nav() {
       <div className="flex-1" />
      <Link href={'/auth'}><Button size="sm" >Sign in</Button></Link>
     </header>
+ 
+    </>
   )
 }
 

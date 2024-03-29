@@ -160,67 +160,81 @@ const tag = "lands"
 const handleUpdate = (e)=>{
 
   e.preventDefault()
-
-
-  
-    //upload photos================
-const tag = "lands"
-
-files.forEach((file) => {
-const storageRef = ref(storage, `${tag}/${file.name}`);
-const uploadTask = uploadBytesResumable(storageRef, file);
-
-uploadTask.on(
-  'state_changed',
-  (snapshot) => {
-    const progressValue = Math.round(
-      (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    );
-    setProgress((prevProgress) => ({
-      ...prevProgress,
-      [file.name]: progressValue,
-    }));
-  },
-  (error) => {
-    setError(error.message);
-  },
-  () => {
-  
-     getDownloadURL(ref(storage, `${tag}/${file.name}`))
-      .then((url) => {
-        // successs================
-     images.push(url)
-        
-  
-  console.log('File available at: ', url);
-   
-if(images.length === files.length){
+  const tag = "lands"
+if(files.length==0){
   setDisabled(true)
- const doc = {
-  description,
- name,
- label: name,
- category:tag,
- size,
- location,
- price,
- updatedAt : serverTimestamp(),
- images,
- thumbnail : images[0],
- status:"available"
- }
-
-updateItem(selectedId,doc)
-setSuccess("Updated successifully")
-setDisabled(false)
-}
-
-
-      });
+  const doc = {
+   description,
+  name,
+  label: name,
+  category:tag,
+  size,
+  location,
+  price,
+  updatedAt : serverTimestamp(),
+  status:status
   }
-);
-});
-
+ 
+ updateItem(selectedId,doc)
+ setSuccess("Updated successifully")
+ setDisabled(false)
+}else{
+  
+files.forEach((file) => {
+  const storageRef = ref(storage, `${tag}/${file.name}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+  
+  uploadTask.on(
+    'state_changed',
+    (snapshot) => {
+      const progressValue = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      );
+      setProgress((prevProgress) => ({
+        ...prevProgress,
+        [file.name]: progressValue,
+      }));
+    },
+    (error) => {
+      setError(error.message);
+    },
+    () => {
+    
+       getDownloadURL(ref(storage, `${tag}/${file.name}`))
+        .then((url) => {
+          // successs================
+       images.push(url)
+          
+    
+    console.log('File available at: ', url);
+     
+  if(images.length === files.length){
+    setDisabled(true)
+   const doc = {
+    description,
+   name,
+   label: name,
+   category:tag,
+   size,
+   location,
+   price,
+   updatedAt : serverTimestamp(),
+   images,
+   thumbnail : images[0],
+   status:status
+   }
+  
+  updateItem(selectedId,doc)
+  setSuccess("Updated successifully")
+  setDisabled(false)
+  }
+  
+  
+        });
+    }
+  );
+  });
+}
 
 
 } 
@@ -459,9 +473,9 @@ const handleDelete = (id,name) => {
         <Label htmlFor="photos">Photos</Label>
         <Input id="photos" multiple type="file"  onChange={handleChange}/>
         {Object.keys(progress).map((fileName) => (
-        <div key={fileName}>
+        <span key={fileName}>
           <small>{fileName}: {progress[fileName]}%</small>
-        </div>
+        </span>
       ))}
       {error && <div style={{ color: 'red' }}>{error}</div>}
       {success && <div style={{ color: 'green' }}>{success}</div>}

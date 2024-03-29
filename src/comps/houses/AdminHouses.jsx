@@ -158,67 +158,81 @@ const tag = "houses"
 const handleUpdate = (e)=>{
 
   e.preventDefault()
-
-
-  
-    //upload photos================
-const tag = "houses"
-
-files.forEach((file) => {
-const storageRef = ref(storage, `${tag}/${file.name}`);
-const uploadTask = uploadBytesResumable(storageRef, file);
-
-uploadTask.on(
-  'state_changed',
-  (snapshot) => {
-    const progressValue = Math.round(
-      (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    );
-    setProgress((prevProgress) => ({
-      ...prevProgress,
-      [file.name]: progressValue,
-    }));
-  },
-  (error) => {
-    setError(error.message);
-  },
-  () => {
-  
-     getDownloadURL(ref(storage, `${tag}/${file.name}`))
-      .then((url) => {
-        // successs================
-     images.push(url)
-        
-  
-  console.log('File available at: ', url);
-   
-if(images.length === files.length){
+  const tag = "houses"
+if(files.length==0){
   setDisabled(true)
- const doc = {
-  description,
- name,
- label: name,
- category:tag,
- size,
- location,
- price,
- updatedAt : serverTimestamp(),
- images,
- thumbnail : images[0],
- status:"available"
- }
-
-updateItem(selectedId,doc)
-setSuccess("Updated successifully")
-setDisabled(false)
-}
-
-
-      });
+  const doc = {
+   description,
+  name,
+  label: name,
+  category:tag,
+  size,
+  location,
+  price,
+  updatedAt : serverTimestamp(),
+  status:status
   }
-);
-});
-
+ 
+ updateItem(selectedId,doc)
+ setSuccess("Updated successifully")
+ setDisabled(false)
+}else{
+  
+files.forEach((file) => {
+  const storageRef = ref(storage, `${tag}/${file.name}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+  
+  uploadTask.on(
+    'state_changed',
+    (snapshot) => {
+      const progressValue = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      );
+      setProgress((prevProgress) => ({
+        ...prevProgress,
+        [file.name]: progressValue,
+      }));
+    },
+    (error) => {
+      setError(error.message);
+    },
+    () => {
+    
+       getDownloadURL(ref(storage, `${tag}/${file.name}`))
+        .then((url) => {
+          // successs================
+       images.push(url)
+          
+    
+    console.log('File available at: ', url);
+     
+  if(images.length === files.length){
+    setDisabled(true)
+   const doc = {
+    description,
+   name,
+   label: name,
+   category:tag,
+   size,
+   location,
+   price,
+   updatedAt : serverTimestamp(),
+   images,
+   thumbnail : images[0],
+   status:status
+   }
+  
+  updateItem(selectedId,doc)
+  setSuccess("Updated successifully")
+  setDisabled(false)
+  }
+  
+  
+        });
+    }
+  );
+  });
+}
 
 
 } 
@@ -373,7 +387,7 @@ const handleDelete = (id,name) => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">Price</Label>
-          <Input  value={price}  id="price" placeholder="Enter the price"   onChange={(e)=>{setPrice(e.target.value)}}/>
+          <Input  value={price}  id="price" placeholder="Eg KES 20M"   onChange={(e)=>{setPrice(e.target.value)}}/>
         </div>
         <div className="space-y-2">
           <Label htmlFor="location">Location</Label>
@@ -386,7 +400,7 @@ const handleDelete = (id,name) => {
           <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Size</Label>
+          <Label htmlFor="location">Size(Optional)</Label>
           <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
         </div>
       </div>
@@ -449,7 +463,7 @@ const handleDelete = (id,name) => {
           <Input  value={status}  id="price" placeholder="eg available or sold"   onChange={(e)=>{setStatus(e.target.value)}}/>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Size</Label>
+          <Label htmlFor="location">Size(Optional)</Label>
           <Input  value={size}  id="location" placeholder="size of the house"   onChange={(e)=>{setSize(e.target.value)}}/>
         </div>
       </div>
