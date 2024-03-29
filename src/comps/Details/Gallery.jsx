@@ -26,7 +26,7 @@ export default function Gallery({data,loading,error}) {
       </div>
       <div className="grid my-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-5xl mx-auto">
       {data?.images?.map(image =>(
-        <Link  href={image} target="_blank" >
+        <Link  href={image} target="_blank"  key={image}>
 
       <Image   
          alt={data.name}
