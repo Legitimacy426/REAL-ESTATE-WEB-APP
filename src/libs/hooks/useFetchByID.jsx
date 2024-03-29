@@ -27,7 +27,7 @@ const [isPendingC1, setPendingC] = useState(true);
       const userRef = doc(db, "properties",id);
       q = query(
         userRef,
-      
+         
        );
    
     getDoc(q)
@@ -35,6 +35,7 @@ const [isPendingC1, setPendingC] = useState(true);
         Cards.push({ ...user.data(), id: user.id });
         setCards(Cards);
         setPendingC(false);
+        console.log(Cards,'----------------------------')
       })
       .catch((e) => {
         console.log(e.message);

@@ -61,9 +61,9 @@ setError("")
             <div className="inline-block p-4 bg-white bg-opacity-75">
               <FlagIcon className="h-12 w-12 text-blue-500" />
             </div>
-            <h1 className="mt-4 text-4xl font-bold text-white">  <span>Marani</span>
-               <span  className="text-red-500" >Global</span>
-               <span>Properties</span></h1>
+            <h1 className="mt-4 text-2xl lg:text-4xl font-bold text-white">  <span>MARANI</span>
+               <span  className="text-red-500" >GLOBAL</span>
+               <span>PROPERTIES</span></h1>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@ setError("")
         <div className="mb-6">
       
           <h1 className="mt-1 text-3xl font-bold">Admin Signin</h1>
-          <p className="mt-1 text-gray-700">Fill in the email and address to login to the dashbaord</p>
+          <p className="mt-1 text-gray-700">Fill in the Email and Password to login to the dashbaord</p>
           {error && (
             <div className="flex items-center space-x-2 text-sm p-4 text-red-600 dark:text-red-500">
             <ExclamationTriangleIcon className="h-4 w-4" />

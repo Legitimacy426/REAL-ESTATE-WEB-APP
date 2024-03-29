@@ -8,10 +8,14 @@ import { Button } from "@/components/ui/button"
 import { CardContent, Card } from "@/components/ui/card"
 import { CarouselItem, CarouselContent, CarouselPrevious, CarouselNext, Carousel } from "@/components/ui/carousel"
 import useFetch from "@/libs/hooks/useFetch"
+import { ArrowRightIcon } from "@radix-ui/react-icons"
+import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import Errors from "../Errors"
 export default function Houses() {
   const { cards, isErrorC, isPendingC } = useFetch("houses")  
-
+const router = useRouter()
   return (
     <section id="houses" className="w-full py-12 lg:py-24">
     <div className="container px-4 md:px-6">
@@ -37,9 +41,9 @@ export default function Houses() {
             <CarouselContent>
              {card.images.map(image =>(
                 <CarouselItem  key={image}>
-                <Link href={image} target="_blank" className="aspect-[4/3]">
-                  <img
-                    alt="House 1"
+                <div  className="aspect-[4/3]">
+                  <Image
+                    alt={card.name}
                     className="object-cover rounded cursor-pointer"
                     height={350}
                     src={image}
@@ -50,7 +54,7 @@ export default function Houses() {
                     width={450}
                    
                   />
-                </Link>
+                </div>
               </CarouselItem>
              ))}
             
@@ -59,14 +63,23 @@ export default function Houses() {
           </Carousel>
         </div>
         <CardContent className="p-6">
-          <h3 className="text-lg font-semibold">{card.name}</h3>
+        <div className="flex items-end justify-between">
+       <div> <h3 className="text-lg font-semibold">{card.name}</h3>
           <p className="text-sm opacity-60 truncate">{card.location}</p>
           <p className="text-2xl font-semibold">{card.price.toUpperCase()}</p>
-          {/* <small className="text-sm opacity-60 truncate">{card.description}</small> */}
+        </div>
+        <Button size="icon" variant="outline" onClick={()=>{router.push(`details/${card.id}`)}} >
+            <ArrowRightIcon className="h-4 w-4"  />
+              <span className="sr-only">View</span>
+            </Button>
+        </div>
+      
         </CardContent>
       </Card>
   ))}
-</section>
+ 
+</section> 
+<Errors data={cards} loading={isPendingC} error={isErrorC} />
     </div>
   </section>
   )
