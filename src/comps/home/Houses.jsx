@@ -24,7 +24,7 @@ const router = useRouter()
           <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
             Available houses
           </div>
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Charming Houses, Must-See!</h2>
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Captivating Houses, Must-See!</h2>
           <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-450">
             Step into the welcoming embrace of this impeccably
            designed and thoughtfully crafted houses, where spaciousness meets
