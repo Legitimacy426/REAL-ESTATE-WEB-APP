@@ -38,20 +38,20 @@ export default function Contacts() {
               <div className="flex items-center space-x-4">
                 <MapPinIcon className="w-6 h-6 flex-shrink-0" />
                 <div className="space-y-1.5">
-                  <p className="font-medium">Biashara  Rd</p>
-                  <p>Nairobi Kenya,View park Towers</p>
+                  {/* <p >Biashara  Rd</p> */}
+                  <p className="font-medium">Jubilee exchange,2nd Floor Office 223&224</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <PhoneIcon className="w-6 h-6 flex-shrink-0" />
                 <a className="underline underline-offset-2" href="#">
-                +254746121317
+                +254722161438
                 </a>
               </div>
               <div className="flex items-center space-x-4">
                 <MailOpenIcon className="w-6 h-6 flex-shrink-0" />
                 <a className="underline underline-offset-2" href="#">
-                  info@example.com
+                  maraniproperties@gmail.com
                 </a>
               </div>
             </div>
