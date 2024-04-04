@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="relative w-full h-">
         
         <img alt="Hero" className="w-full h-[700px] object-cover" height="700" src="/images/house1.jpg" width="" />
-        <div className="absolute inset-0 flex items-center justify-center w-auto bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center w-auto bg-black/60">
           <div className="container flex flex-col items-center gap-4 px-4">
             <div className="flex flex-col items-center space-y-2 text-center">
               <h1 className="text-2xl my-6 font-bold tracking-tighter text-white sm:text-3xl md:text-3xl lg:text-4xl dark:text-gray-100">

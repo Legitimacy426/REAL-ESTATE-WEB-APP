@@ -11,8 +11,8 @@ export default function Herodetails({data,loading,error}) {
     <div className="bg-white">
    
       <header className="relative">
-        <img alt={data?.name} className="w-full h-[500px] object-cover" src={data?.thumbnail}  />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <img alt={data?.name} className="w-full h-[500px] object-cover" src={data?.images[Math.floor(Math.random()*data?.images.length)]}  />
+        <div className="absolute inset-0 bg-black bg-opacity-65 flex items-center justify-center">
           <div className="text-center">
             <p className="text-white text-sm uppercase tracking-widest">Yes this one is for you</p>
           {!loading && (
